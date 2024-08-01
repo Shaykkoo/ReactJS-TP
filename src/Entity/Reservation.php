@@ -6,7 +6,7 @@ use App\Repository\ReservationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
-use App\Entity\User as user;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ApiResource]
