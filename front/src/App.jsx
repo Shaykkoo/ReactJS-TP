@@ -6,7 +6,8 @@ import NavbarComponent from './components/navbar';
 import HomeCabinets from './pages/HomeCabinets';
 import About from './pages/About';
 import Contact from './pages/Contact';
-
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
@@ -34,6 +35,8 @@ function App() {
         <Route path="/cabinets" element={<HomeCabinets />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Register" element={<Register />} />
       </Routes>
     </Box>
   )
