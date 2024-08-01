@@ -48,7 +48,7 @@ class ApiRegisterController extends AbstractController
         $hashedpass = $userPasswordHasher->hashPassword($user, $data['password']);
         $user->setEmail($data['username']);
         $user->setPassword($hashedpass);
-        $user->setAdresse($data['username']);
+        $user->setAdresse($data['adresse']);
         $user->setNom($data['nom']);
         $user->setPrenom($data['prenom']);
         $user->setTelephone($data['telephone']);
