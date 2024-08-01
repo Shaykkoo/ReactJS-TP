@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    padding: 0;
     font-family: 'Arial', sans-serif;
     background-color: #f5f5f5;
   }
@@ -128,6 +129,10 @@ body {
   
   .toolbar .link:hover {
     text-decoration: underline;
+<<<<<<< HEAD
   }
   
   
+=======
+  }
+>>>>>>> c443947b9894d2d2ae692b3dbcf4fe0dda0e844a
