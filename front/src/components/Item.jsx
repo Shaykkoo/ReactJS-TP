@@ -1,13 +1,19 @@
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext'; 
 
 function ItemComponent({ nom, description, disponibilite, adresse, id }) {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   const handleClick = () => {
-    if (disponibilite) {
-      navigate(`/cabinets/details/${id}`);
+    if (isAuthenticated) {
+      if (disponibilite) {
+        navigate(`/cabinets/details/${id}`);
+      }
+    } else {
+      navigate('/login');
     }
   };
 
@@ -23,8 +29,7 @@ function ItemComponent({ nom, description, disponibilite, adresse, id }) {
         mb: '20px',
         border: '1px solid #ddd',
         borderRadius: 1,
-        background: disponibilite ? 'radial-gradient(#f0f0f0, #fffaf1)': '#e0e0e0',
-        /* backgroundColor: disponibilite ? '#fffaf1' : '#e0e0e0', */
+        background: disponibilite ? 'radial-gradient(#f0f0f0, #fffaf1)' : '#e0e0e0',
         opacity: disponibilite ? 1 : 0.6,
         pointerEvents: disponibilite ? 'auto' : 'none',
         boxShadow: '0 0 10px #748091'
@@ -55,14 +60,13 @@ function ItemComponent({ nom, description, disponibilite, adresse, id }) {
           sx={{ 
             color: '#FFF2DC',
             bgcolor: '#001C2F',
-            
 
             '&:hover': {
               bgcolor: '#e6b694', 
               color: '#001C2F',
               boxShadow: '0 0 10px #d59f79',
             }}}
-          disabled={!disponibilite}
+          disabled={!disponibilite && isAuthenticated}
         >
           Plus d'infos
         </Button>

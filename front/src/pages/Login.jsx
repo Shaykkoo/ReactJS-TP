@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/login', { email, password });
-      localStorage.setItem('token', response.data.token);
-      navigate('/home');
-    } catch (err) {
-      setError('Erreur de connexion. Veuillez vérifier vos informations.');
+      const response = await axios.post('http://127.0.0.1:8000/api/login', {
+        username: email,
+        password
+      });
+
+      const { prenom, nom } = response.data.user; // Assuming this is the correct structure
+      login(prenom, nom);
+      navigate('/');
+    } catch (error) {
+      setError('Erreur de connexion. Veuillez vérifier vos identifiants.');
     }
   };
 

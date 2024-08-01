@@ -49,7 +49,7 @@ function Home() {
         </Box>
       ))}
       <SmoothScrollComponent>
-      <HomeAbout />
+        <HomeAbout />
       </SmoothScrollComponent>
       </Box>
       

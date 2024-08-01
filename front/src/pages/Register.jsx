@@ -5,9 +5,11 @@ import { Container, TextField, Button, Typography, Paper, AppBar, Toolbar, Check
 import '../index.css';
 
 const Register = () => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(''); // Nom
+  const [firstName, setFirstName] = useState(''); // Prénom
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState(''); // Adresse
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -15,24 +17,34 @@ const Register = () => {
   const [buttonState, setButtonState] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const handleRegister = async (event) => {
+    event.preventDefault();
     if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas.');
+      setError("Les mots de passe ne correspondent pas");
       return;
     }
     if (!acceptedTerms) {
-      setError('Vous devez accepter les termes et conditions.');
+      setError("Vous devez accepter les termes et conditions");
       return;
     }
+
     try {
-      await axios.post('/api/users', { name, email, password });
-      setButtonState('success');
-      setTimeout(() => {
+      const response = await axios.post('http://127.0.0.1:8000/api/register', {
+        username: email,
+        password,
+        nom: name,
+        prenom: firstName, // Envoi du prénom
+        telephone: phone,
+        adresse: address // Envoi de l'adresse
+      });
+
+      if (response.status === 200) {
         navigate('/login');
-      }, 1000);
-    } catch (err) {
-      setError('Erreur d\'inscription. Veuillez vérifier vos informations.');
+      } else {
+        setError(response.data.error || 'Erreur lors de l\'inscription');
+      }
+    } catch (error) {
+      setError(error.response.data.error || 'Erreur lors de l\'inscription');
     }
   };
 
@@ -53,6 +65,16 @@ const Register = () => {
           </Typography>
           <form onSubmit={handleRegister}>
             <TextField
+              id="firstName"
+              label="Prénom"
+              type="text"
+              fullWidth
+              margin="normal"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+            <TextField
               id="name"
               label="Nom"
               type="text"
@@ -69,16 +91,28 @@ const Register = () => {
               fullWidth
               margin="normal"
               value={email}
-              onChange={(e) => setEmail(e.target.value)} 
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
             <TextField
-              label="Télécacaphone"
+              id="phone"
+              label="Téléphone"
               type="tel"
               fullWidth
               margin="normal"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+            <TextField
+              id="address"
+              label="Adresse"
+              type="text"
+              fullWidth
+              margin="normal"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
             />
             <TextField
               id="password"
@@ -128,4 +162,3 @@ const Register = () => {
 };
 
 export default Register;
-
