@@ -6,13 +6,14 @@ import NavbarComponent from './components/navbar';
 import HomeCabinets from './pages/HomeCabinets';
 import About from './pages/About';
 import Contact from './pages/Contact';
-/* import Login from './pages/Login'
-import Register from './pages/Register' */
+import Login from './pages/Login'
+import Register from './pages/Register'
 
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './fonts/fonts.css'
 import './App.css'
+
 
 function App() {
   const [isLogged, setIsLogged] = useState(false);
