@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use App\Entity\User;
+use App\Entity\Cabinet as cabinet;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 #[ApiResource]
