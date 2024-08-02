@@ -5,15 +5,15 @@ import { useAuth } from '../contexts/AuthContext';
 
 function ItemComponent({ nom, description, disponibilite, adresse, id }) {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isLogged } = useAuth(); // Assurez-vous que vous obtenez la valeur correcte pour l'état de connexion
 
   const handleClick = () => {
-    if (isAuthenticated) {
-      if (disponibilite) {
-        navigate(`/cabinets/details/${id}`);
-      }
+    if (!isLogged) {
+      navigate('/login'); // Redirige vers la page de connexion si l'utilisateur n'est pas connecté
+    } else if (disponibilite) {
+      navigate(`/cabinets/details/${id}`); // Redirige vers les détails du cabinet si disponible
     } else {
-      navigate('/login');
+      // Optionnel : Vous pouvez afficher un message ou une alerte ici si le cabinet n'est pas disponible
     }
   };
 
@@ -36,7 +36,7 @@ function ItemComponent({ nom, description, disponibilite, adresse, id }) {
       }}
     >
       <Box sx={{ flex: 1 }}>
-        <Typography variant="h6" sx={{ fontWeight: 'bold',  color: '#001C2F', textShadow: '0 0 3px rgba(0, 0, 0, 0.3)' }}>
+        <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#001C2F', textShadow: '0 0 3px rgba(0, 0, 0, 0.3)' }}>
           {nom}
         </Typography>
         <Typography variant="body1" sx={{ color: '#939fb0', textShadow: '0.1px 0.1px 0 #000' }}>
@@ -60,13 +60,13 @@ function ItemComponent({ nom, description, disponibilite, adresse, id }) {
           sx={{ 
             color: '#FFF2DC',
             bgcolor: '#001C2F',
-
             '&:hover': {
               bgcolor: '#e6b694', 
               color: '#001C2F',
               boxShadow: '0 0 10px #d59f79',
-            }}}
-          disabled={!disponibilite && isAuthenticated}
+            }
+          }}
+          disabled={!disponibilite} 
         >
           Plus d'infos
         </Button>

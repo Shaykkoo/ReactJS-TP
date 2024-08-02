@@ -18,10 +18,29 @@ const Login = () => {
         password
       });
 
-      const { prenom, nom } = response.data.user; // Assuming this is the correct structure
-      login(prenom, nom);
-      navigate('/');
+      const user = response.data;
+      console.log('API response:', user);
+
+      if (user && user.id) {
+        // Faire une autre requête pour obtenir les détails de l'utilisateur
+        const userDetailsResponse = await axios.get(`http://127.0.0.1:8000/api/users/${user.id}`);
+        const userDetails = userDetailsResponse.data;
+
+        // Affichage des propriétés utilisateur individuelles
+        console.log('Prénom:', userDetails.prenom);
+        console.log('Nom:', userDetails.nom);
+        console.log('Adresse:', userDetails.adresse);
+        console.log('Téléphone:', userDetails.telephone);
+        console.log('Email:', userDetails.email);
+
+        const { prenom, nom } = userDetails;
+        login(prenom, nom);
+        navigate('/');
+      } else {
+        throw new Error('Données utilisateur manquantes');
+      }
     } catch (error) {
+      console.error('Error during login:', error); // Log error details for debugging
       setError('Erreur de connexion. Veuillez vérifier vos identifiants.');
     }
   };
