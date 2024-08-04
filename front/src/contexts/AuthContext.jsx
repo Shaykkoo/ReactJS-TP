@@ -1,40 +1,52 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
 export const AuthProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
-  const [userFirstName, setUserFirstName] = useState('');
-  const [userLastName, setUserLastName] = useState('');
+  const [userFirstName, setUserFirstName] = useState("");
+  const [userLastName, setUserLastName] = useState("");
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
       setIsLogged(true);
-      setUserFirstName(storedUser.firstName);
-      setUserLastName(storedUser.lastName);
+      setUserFirstName(user.firstName);
+      setUserLastName(user.lastName);
+      setUserId(user.id);
     }
   }, []);
 
-  const login = (firstName, lastName) => {
+  const login = (firstName, lastName, id) => {
     setIsLogged(true);
     setUserFirstName(firstName);
     setUserLastName(lastName);
-    localStorage.setItem('user', JSON.stringify({ firstName, lastName }));
+    setUserId(id);
+
+    // Stockage dans le localStorage
+    localStorage.setItem("user", JSON.stringify({ firstName, lastName, id }));
   };
 
   const logout = () => {
     setIsLogged(false);
-    setUserFirstName('');
-    setUserLastName('');
-    localStorage.removeItem('user');
+    setUserFirstName("");
+    setUserLastName("");
+    setUserId(null);
+
+    // Nettoyer le localStorage
+    localStorage.removeItem("user");
   };
 
   return (
-    <AuthContext.Provider value={{ isLogged, userFirstName, userLastName, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLogged, userFirstName, userLastName, userId, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

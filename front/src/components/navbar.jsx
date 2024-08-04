@@ -1,27 +1,37 @@
-// components/NavbarComponent.jsx
-import React, { useState } from 'react';
-import { AppBar, Box, Button, Toolbar, Typography, Link as MuiLink, Menu, MenuItem } from '@mui/material';
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
-import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import ApartmentRoundedIcon from '@mui/icons-material/ApartmentRounded';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
-import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
-import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importer useNavigate
+import {
+  AppBar,
+  Box,
+  Button,
+  Toolbar,
+  Typography,
+  Link as MuiLink,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import ApartmentRoundedIcon from "@mui/icons-material/ApartmentRounded";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
+import DescriptionRoundedIcon from "@mui/icons-material/DescriptionRounded";
+import { useAuth } from "../contexts/AuthContext";
 
 const capitalizeFirstLetter = (str) => {
   return str
     .toLowerCase()
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 function NavbarComponent({ tabs }) {
-  const { isLogged, userFirstName, userLastName, logout } = useAuth();
+  const { isLogged, userFirstName, userLastName, userId, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate(); // Déclarer useNavigate
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,54 +44,66 @@ function NavbarComponent({ tabs }) {
   const handleLogout = () => {
     logout();
     handleMenuClose();
+    navigate("/login");
+  };
+
+  const handleReservations = () => {
+    navigate(`/reservation/${userId}`);
+    handleMenuClose();
+  };
+
+  const handleSettings = () => {
+    navigate(`/settings/${userId}`);
+    handleMenuClose();
   };
 
   const fullName = `${userFirstName} ${userLastName}`;
   const formattedName = capitalizeFirstLetter(fullName);
 
   return (
-    <AppBar position="static" sx={{ background: 'radial-gradient(#f0f0f0, #fffaf1)' }}>
+    <AppBar
+      position="static"
+      sx={{ background: "radial-gradient(#f0f0f0, #fffaf1)" }}
+    >
       <Toolbar>
-        <Box sx={{ flexGrow: 1, display: 'flex', gap: 10 }}>
+        <Box sx={{ flexGrow: 1, display: "flex", gap: 10 }}>
           {tabs.map((tab, index) => (
             <MuiLink
               key={index}
               href={tab.link}
               sx={{
-                position: 'relative',
-                color: '#2A4E62',
-                textDecoration: 'none',
-                overflow: 'hidden',
-                transition: '0.5s ease',
-                display: 'flex',
-                alignItems: 'center',
+                position: "relative",
+                color: "#2A4E62",
+                textDecoration: "none",
+                overflow: "hidden",
+                transition: "0.5s ease",
+                display: "flex",
+                alignItems: "center",
                 gap: 1,
-                '&::after': {
+                "&::after": {
                   content: '""',
-                  position: 'absolute',
+                  position: "absolute",
                   bottom: 0,
-                  left: '-100%',
-                  width: '100%',
-                  height: '2px',
-                  backgroundColor: '#001C2F',
-                  transition: 'left 0.5s ease',
+                  left: "-100%",
+                  width: "100%",
+                  height: "2px",
+                  backgroundColor: "#001C2F",
+                  transition: "left 0.5s ease",
                 },
-                '&:hover::after': {
+                "&:hover::after": {
                   left: 0,
                 },
-                '&:hover': {
-                  color: '#001C2F',
-                  textShadow: '0 0 4px rgba(0, 0, 0, 0.3)',
+                "&:hover": {
+                  color: "#001C2F",
+                  textShadow: "0 0 4px rgba(0, 0, 0, 0.3)",
                 },
               }}
             >
-              {tab.label === 'Accueil' && <HomeRoundedIcon />}
-              {tab.label === 'Cabinets' && <ApartmentRoundedIcon />} 
-              {tab.label === 'À propos' && <InfoRoundedIcon />}
-              {tab.label === 'Contact' && <EmailRoundedIcon />}
-              <Typography variant="h6">
-                {tab.label}
-              </Typography>
+              {tab.label === "Accueil" && <HomeRoundedIcon />}
+              {tab.label === "Cabinets" && <ApartmentRoundedIcon />}
+              {tab.label === "À propos" && <InfoRoundedIcon />}
+              {tab.label === "Contact" && <EmailRoundedIcon />}
+              <Typography variant="h6">{tab.label}</Typography>
             </MuiLink>
           ))}
         </Box>
@@ -91,19 +113,20 @@ function NavbarComponent({ tabs }) {
               onClick={handleMenuClick}
               endIcon={anchorEl ? <ArrowDropUp /> : <ArrowDropDown />}
               sx={{
-                color: '#001C2F',
-                textTransform: 'capitalize',
-                fontSize: '0.875rem',
-                bgcolor: '#B1BAC7',
-                border: '1px solid #9ba6b4',
-                boxShadow: '0 5px 10px rgba(0,0,0,0.3)',
-                display: 'flex',
-                alignItems: 'center',
+                color: "#001C2F",
+                width: "160px",
+                textTransform: "capitalize",
+                fontSize: "0.875rem",
+                bgcolor: "#B1BAC7",
+                border: "1px solid #9ba6b4",
+                boxShadow: "0 5px 10px rgba(0,0,0,0.3)",
+                display: "flex",
+                alignItems: "center",
                 gap: 1,
-                '&:hover': {
-                  bgcolor: '#f7e1ba',
-                  border: '1px solid #e0cca9',
-                  boxShadow: '0 0 10px #e0cca9',
+                "&:hover": {
+                  bgcolor: "#f7e1ba",
+                  border: "1px solid #e0cca9",
+                  boxShadow: "0 0 10px #e0cca9",
                 },
               }}
             >
@@ -114,32 +137,32 @@ function NavbarComponent({ tabs }) {
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
               sx={{
-                '& .MuiPaper-root': {
-                  borderRadius: '4px',
-                  boxShadow: 'none',
-                  border: '1px solid #9ba6b4',
-                  marginTop: '4px',
-                  width: '17vh',
-                  backgroundColor: '#B1BAC7',
+                "& .MuiPaper-root": {
+                  borderRadius: "4px",
+                  boxShadow: "none",
+                  border: "1px solid #9ba6b4",
+                  marginTop: "4px",
+                  width: "160px",
+                  backgroundColor: "#B1BAC7",
                 },
-                '& .MuiMenuItem-root': {
-                  fontSize: '0.875rem',
-                  color: '#001C2F',
-                  display: 'flex',
-                  alignItems: 'center',
+                "& .MuiMenuItem-root": {
+                  fontSize: "0.875rem",
+                  color: "#001C2F",
+                  display: "flex",
+                  alignItems: "center",
                   gap: 1,
-                  transition: '0.3s',
-                  '&:hover': {
-                    backgroundColor: '#8c97a7',
+                  transition: "0.3s",
+                  "&:hover": {
+                    backgroundColor: "#8c97a7",
                   },
                 },
               }}
             >
-              <MenuItem onClick={handleMenuClose}>
+              <MenuItem onClick={handleReservations}>
                 <DescriptionRoundedIcon sx={{ marginRight: 1 }} />
                 Réservations
               </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
+              <MenuItem onClick={handleSettings}>
                 <SettingsRoundedIcon sx={{ marginRight: 1 }} />
                 Paramètres
               </MenuItem>
@@ -156,14 +179,14 @@ function NavbarComponent({ tabs }) {
               href="/login"
               sx={{
                 marginRight: 2,
-                color: '#001C2F',
-                bgcolor: '#B1BAC7',
-                border: '1px solid #9ba6b4',
-                boxShadow: '0 5px 10px rgba(0,0,0,0.3)',
-                '&:hover': {
-                  bgcolor: '#f7e1ba',
-                  border: '1px solid #e0cca9',
-                  boxShadow: '0 0 10px #e0cca9',
+                color: "#001C2F",
+                bgcolor: "#B1BAC7",
+                border: "1px solid #9ba6b4",
+                boxShadow: "0 5px 10px rgba(0,0,0,0.3)",
+                "&:hover": {
+                  bgcolor: "#f7e1ba",
+                  border: "1px solid #e0cca9",
+                  boxShadow: "0 0 10px #e0cca9",
                 },
               }}
             >
@@ -173,14 +196,14 @@ function NavbarComponent({ tabs }) {
               color="inherit"
               href="/register"
               sx={{
-                color: '#001C2F',
-                bgcolor: '#B1BAC7',
-                border: '1px solid #9ba6b4',
-                boxShadow: '0 5px 10px rgba(0,0,0,0.3)',
-                '&:hover': {
-                  bgcolor: '#f7e1ba',
-                  border: '1px solid #e0cca9',
-                  boxShadow: '0 0 10px #e0cca9',
+                color: "#001C2F",
+                bgcolor: "#B1BAC7",
+                border: "1px solid #9ba6b4",
+                boxShadow: "0 5px 10px rgba(0,0,0,0.3)",
+                "&:hover": {
+                  bgcolor: "#f7e1ba",
+                  border: "1px solid #e0cca9",
+                  boxShadow: "0 0 10px #e0cca9",
                 },
               }}
             >
